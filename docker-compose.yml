@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+    devops:
+      #image: dev-node-env
+      image:  dev-devops-env
+      ports:
+        - "2222:22"
+      volumes:
+        - /home/arrow/Documentos/keys/ssh-keys/aquaman/ssh.pub:/home/ubuntu/.ssh/authorized_keys
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /usr/bin/docker:/usr/bin/docker
+        - /usr/bin/docker-compose:/usr/bin/docker-compose
+    node:
+      image: dev-node-env
+      #image:  dev-devops-env
+      ports:
+        - "2221:22"
+      volumes:
+        - /home/arrow/Documentos/keys/ssh-keys/aquaman/ssh.pub:/home/ubuntu/.ssh/authorized_keys
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /usr/bin/docker:/usr/bin/docker
+        - /usr/bin/docker-compose:/usr/bin/docker-compose
