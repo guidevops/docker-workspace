@@ -1,0 +1,25 @@
+image: docker:git
+
+stages:
+  - build-docker
+
+variables:
+  IMAGE_FRONTEND: "docker-rep/developer-env"  
+  REPO: "gitlab.com"
+
+build-image:
+  services:
+  - docker:19.03.5-dind
+#  retry: 2
+  before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REPO
+  stage: build-docker
+  script:
+  - DOCKER_BUILDKIT=1 docker build . --target devops -t devops
+  - docker tag devops $REPO/$IMAGE_FRONTEND:devops
+  - docker push $REPO/$IMAGE_FRONTEND:devops  
+  - DOCKER_BUILDKIT=1 docker build . --target node -t node
+  - docker tag node $REPO/$IMAGE_FRONTEND:node
+  - docker push $REPO/$IMAGE_FRONTEND:node
+  only:
+      - master
