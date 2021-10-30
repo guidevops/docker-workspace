@@ -4,7 +4,7 @@ stages:
   - build-docker
 
 variables:
-  IMAGE_FRONTEND: "TerraqueoDev/docker-develop-env"  
+  IMAGE_FRONTEND: "terraqueodev/docker-develop-env"  
   REPO: "gitlab.com"
 
 build-image:
