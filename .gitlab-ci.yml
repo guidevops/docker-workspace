@@ -5,7 +5,7 @@ stages:
 
 variables:
   IMAGE_FRONTEND: "terraqueodev/docker-develop-env"  
-  REPO: "gitlab.com"
+  REPO: "registry.gitlab.com"
 
 build-image:
   services:
