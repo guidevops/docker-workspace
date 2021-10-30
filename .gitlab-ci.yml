@@ -12,7 +12,7 @@ build-image:
   - docker:19.03.5-dind
 #  retry: 2
   before_script:
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REPO
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.com
   stage: build-docker
   script:
   - DOCKER_BUILDKIT=1 docker build . --target devops -t devops
