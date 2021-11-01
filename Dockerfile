@@ -12,9 +12,14 @@ RUN apt-get -qq update \
     && apt-get -qq --no-install-recommends install curl \
     && apt-get -qq --no-install-recommends install vim-tiny=2:8.1.* \
     && apt-get -qq --no-install-recommends install nano \
+    && apt-get -qq --no-install-recommends install  python-pkg-resources \
     && apt-get -qq clean    \
     && rm -rf /var/lib/apt/lists/* 
 
+#Configure Docker-compose
+RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose \
+    && ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Configure SSH
 RUN mkdir /var/run/sshd
