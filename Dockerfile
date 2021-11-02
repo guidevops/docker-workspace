@@ -26,13 +26,6 @@ RUN mkdir /var/run/sshd
 RUN ex +"%s/^%sudo.*$/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/g" -scwq! /etc/sudoers
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
-# Setup the default user.
-#RUN useradd -rm -d /home/ubuntu -s /bin/bash -u 1000 -g root -G sudo ubuntu
-#RUN addgroup ubuntu
-#RUN adduser ubuntu ubuntu
-#RUN echo 'ubuntu:ubuntu' | chpasswd
-#USER ubuntu
-#WORKDIR /home/ubuntu
 
 #Setup VS Code Server
 
@@ -78,6 +71,8 @@ RUN apt-get -qq update \
     && apt-get -qq clean    \
     && rm -rf /var/lib/apt/lists/* 
 
+ADD init.sh /init.sh
+RUN chmod +x /init.sh
 
 # Setup default command and/or parameters.
 EXPOSE 22

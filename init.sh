@@ -1,4 +1,4 @@
 #!/bin/bash
 
-#sudo chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+chown -R root:root /home/root/.ssh
 /usr/sbin/sshd -D
