@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup the default user.
-RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo ubuntu
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -u 1000 -g root -G sudo ubuntu
 RUN echo 'ubuntu:ubuntu' | chpasswd
 USER ubuntu
 WORKDIR /home/ubuntu

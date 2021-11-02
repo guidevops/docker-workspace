@@ -27,16 +27,16 @@ RUN ex +"%s/^%sudo.*$/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/g" -scwq! /etc/sudoers
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # Setup the default user.
-RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo ubuntu
-RUN addgroup ubuntu
-RUN adduser ubuntu ubuntu
-RUN echo 'ubuntu:ubuntu' | chpasswd
-USER ubuntu
-WORKDIR /home/ubuntu
+#RUN useradd -rm -d /home/ubuntu -s /bin/bash -u 1000 -g root -G sudo ubuntu
+#RUN addgroup ubuntu
+#RUN adduser ubuntu ubuntu
+#RUN echo 'ubuntu:ubuntu' | chpasswd
+#USER ubuntu
+#WORKDIR /home/ubuntu
 
 #Setup VS Code Server
 
-ARG commit_id=c13f1abb110fc756f9b3a6f16670df9cd9d4cf63
+ARG commit_id=6cba118ac49a1b88332f312a8f67186f7f3c1643
 RUN curl -sSL "https://update.code.visualstudio.com/commit:${commit_id}/server-linux-x64/stable" -o /tmp/vscode-server-linux-x64.tar.gz \
     && mkdir -p ~/.vscode-server/bin/${commit_id} \
     && tar zxvf /tmp/vscode-server-linux-x64.tar.gz -C ~/.vscode-server/bin/${commit_id} --strip 1 
@@ -53,12 +53,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
 
 ADD init.sh /init.sh
 RUN chmod +x /init.sh
-# Setup User Ubuntu.
-#USER ubuntu
+
 
 EXPOSE 22
-EXPOSE 8080
-#CMD ["/usr/bin/sudo", "/usr/sbin/sshd", "-D", "-o", "ListenAddress=0.0.0.0"]
 CMD ["/init.sh"]
 
 
@@ -84,5 +81,5 @@ RUN apt-get -qq update \
 
 # Setup default command and/or parameters.
 EXPOSE 22
-CMD ["/usr/bin/sudo", "/usr/sbin/sshd", "-D", "-o", "ListenAddress=0.0.0.0"]
+CMD ["/init.sh"]
 
