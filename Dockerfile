@@ -27,12 +27,6 @@ RUN ex +"%s/^%sudo.*$/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/g" -scwq! /etc/sudoers
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 
-#Setup VS Code Server
-
-ARG commit_id=6cba118ac49a1b88332f312a8f67186f7f3c1643
-RUN curl -sSL "https://update.code.visualstudio.com/commit:${commit_id}/server-linux-x64/stable" -o /tmp/vscode-server-linux-x64.tar.gz \
-    && mkdir -p ~/.vscode-server/bin/${commit_id} \
-    && tar zxvf /tmp/vscode-server-linux-x64.tar.gz -C ~/.vscode-server/bin/${commit_id} --strip 1 
 
 FROM base AS node
 #Setup Node Packages
