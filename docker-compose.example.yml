@@ -12,6 +12,7 @@ services:
         - "2222:22"
         - "8384:8384" 
       volumes:
+        - < directory/project >:/root/workspace       
         - < directory/ssh.pub >:/root/.ssh/authorized_keys
         - < directory/ssh.pem >:/root/.ssh/id_rsa #optional
         - /var/run/docker.sock:/var/run/docker.sock #optional add access to host Docker
@@ -28,6 +29,7 @@ services:
       ports:
         - "2223:22"
       volumes:
+        - < directory/project >:/root/workspace        
         - < directory/ssh.pub >:/root/.ssh/authorized_keys
         - < directory/ssh.pem >:/root/.ssh/id_rsa #optional
         - /var/run/docker.sock:/var/run/docker.sock #optional add access to host Docker
