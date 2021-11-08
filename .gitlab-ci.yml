@@ -15,11 +15,14 @@ build-image:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REPO
   stage: build-docker
   script:
-  - DOCKER_BUILDKIT=1 docker build . --target devops -t devops
-  - docker tag devops $REPO/$IMAGE_FRONTEND:devops
+  - bash build.sh
+  - docker tag workspace-devops $REPO/$IMAGE_FRONTEND:devops
   - docker push $REPO/$IMAGE_FRONTEND:devops  
-  - DOCKER_BUILDKIT=1 docker build . --target node -t node
-  - docker tag node $REPO/$IMAGE_FRONTEND:node
+  - docker tag workspace-devops-code $REPO/$IMAGE_FRONTEND:devops-code
+  - docker push $REPO/$IMAGE_FRONTEND:devops-code    
+  - docker tag workspace-node $REPO/$IMAGE_FRONTEND:node
   - docker push $REPO/$IMAGE_FRONTEND:node
+  - docker tag workspace-node-code $REPO/$IMAGE_FRONTEND:node-code
+  - docker push $REPO/$IMAGE_FRONTEND:node-code
   only:
       - master

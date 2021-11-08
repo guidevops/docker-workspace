@@ -1,7 +1,9 @@
-FROM ubuntu:focal AS base
+ARG STAGE_VERSION=essentials
+ARG INIT=init
+
+FROM ubuntu:focal AS essentials
 
 ENV DEBIAN_FRONTEND noninteractive
-
 # Setup Base Packages
 
 RUN apt-get -qq update \
@@ -26,9 +28,15 @@ RUN mkdir /var/run/sshd
 RUN ex +"%s/^%sudo.*$/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/g" -scwq! /etc/sudoers
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
-
-
-FROM base AS node
+FROM essentials AS code
+#Install code-server
+ARG CODE_VERSION=3.12.0
+RUN cd /tmp ;\
+    curl -fOL https://github.com/cdr/code-server/releases/download/v$CODE_VERSION/code-server_${CODE_VERSION}_amd64.deb ;\
+    dpkg -i code-server_${CODE_VERSION}_amd64.deb ;\
+    rm code-server_${CODE_VERSION}_amd64.deb
+    
+FROM ${STAGE_VERSION} AS node
 #Setup Node Packages
 USER root
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
@@ -38,15 +46,18 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt-get -qq clean    \
     && rm -rf /var/lib/apt/lists/* 
 
-ADD init.sh /init.sh
+ARG INIT
+
+COPY ${INIT}.sh /init.sh
 RUN chmod +x /init.sh
 
 
 EXPOSE 22
+#ENTRYPOINT ["/init.sh"]
 CMD ["/init.sh"]
 
 
-FROM base AS devops
+FROM ${STAGE_VERSION} AS devops
 #Setup DevOps Packages
 USER root
 
@@ -64,8 +75,9 @@ RUN apt-get -qq update \
     && apt-get -qq --no-install-recommends install ansible \
     && apt-get -qq clean    \
     && rm -rf /var/lib/apt/lists/* 
+ARG INIT
 
-ADD init.sh /init.sh
+COPY ${INIT}.sh /init.sh
 RUN chmod +x /init.sh
 
 # Setup default command and/or parameters.

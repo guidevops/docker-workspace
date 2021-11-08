@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    workspace-ssh-plus-code:
+      image: workspace-node-code  
+      #image: workspace-devops-code
+      environment:
+        - ITEM_URL=https://marketplace.visualstudio.com/items #optional
+        - SERVICE_URL=https://marketplace.visualstudio.com/_apis/public/gallery  #optional     
+      container_name: env-test
+      ports:
+        - "2222:22"
+        - "8384:8384" 
+      volumes:
+        - < directory/ssh.pub >:/root/.ssh/authorized_keys
+        - < directory/ssh.pem >:/root/.ssh/id_rsa #optional
+        - /var/run/docker.sock:/var/run/docker.sock #optional add access to host Docker
+        - /usr/bin/docker:/usr/bin/docker #optional add access to host Docker
+        - vscode_server:/root/.vscode-server/
+        - vscode_config:/root/.local/share/code-server/
+      networks:
+        - net
+      restart: unless-stopped
+
+    workspace-only-ssh:
+      image: workspace-node
+      #image: workspace-devops
+      ports:
+        - "2223:22"
+      volumes:
+        - < directory/ssh.pub >:/root/.ssh/authorized_keys
+        - < directory/ssh.pem >:/root/.ssh/id_rsa #optional
+        - /var/run/docker.sock:/var/run/docker.sock #optional add access to host Docker
+        - /usr/bin/docker:/usr/bin/docker #optional add access to host Docker
+        - vscode2_server:/root/.vscode-server/
+      networks:
+        - net
+      restart: unless-stopped
+
+networks:
+  net:
+    
+volumes:
+  vscode_server:
+  vscode_config:
+  vscode2_server:
