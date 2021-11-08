@@ -15,7 +15,7 @@ build-image:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REPO
   stage: build-docker
   script:
-  - bash build.sh
+  - chmod -x build.sh && ./build.sh
   - docker tag workspace-devops $REPO/$IMAGE_FRONTEND:devops
   - docker push $REPO/$IMAGE_FRONTEND:devops  
   - docker tag workspace-devops-code $REPO/$IMAGE_FRONTEND:devops-code
